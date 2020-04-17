@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
+
+.text {
+    font-family: 'Pangolin', cursive;
+}
+#board {
+    width: 570px;
+    height: 700px;
+}
+#board, #controls {
+    float: left;
+    text-align: center;
+    padding: 12px;
+}
+#hive {
+    position: absolute;
+    background: url(./img/hive.png) no-repeat;
+    height: 625px;
+    width: 541px;
+}
+
+/* Player, Bee and Flower styles */
+.player, .flower-dweller {
+    position: absolute;
+    height: 56px;
+    width: 50px;
+}
+.player {
+    cursor: pointer;
+}
+.player .bee, .flower-dweller .bee {
+    position: absolute;
+    height: 56px;
+    width: 50px;
+    background: url(./img/bee.png) no-repeat;
+    background-size: 50px;
+}
+
+.player .color, .flower-dweller .color  {
+    position: absolute;
+    top: 28px;
+    left: 13px;
+    height: 22px;
+    width: 22px;
+    border-radius: 11px;
+}
+
+.player .name {
+    position: absolute;
+    width: 50px;
+    text-align: center;
+    font-size: 9px;
+    font-weight: 900;
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+}
+.player .name.on-head {
+    top: 12px;
+    color: white;
+}
+.player .name.below-tail {
+    top: 56px;
+    color: black;
+}
+.player .name.none {
+    display: none;
+}
+.flower {
+    position: absolute;
+    background-image: url(./img/flower.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: pink;
+    height: 188px;
+    width: 200px;
+}
+.honeypot {
+    background-image: url(./img/honeypot.png);
+    width: 76px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: 48px 63px;
+}
+.player.shakey {
+    animation: buzz 0.1s;
+    animation-iteration-count: infinite;
+}
+
+/* Modal and popover styles */
+.modal-body .form-row {
+    margin-bottom: 8px;
+}
+.modal-body .form-group .label {
+    text-align: right;
+}
+
+.pop .fas {
+    font-size: 1.3em;
+    padding: 4px;
+    border-radius: 4px;
+}
+.pop .fas:hover {
+    cursor: pointer;
+    color: white;
+}
+.pop .fa-arrow-alt-circle-down {
+    color: orange;
+}
+.pop .fa-arrow-alt-circle-down:hover {
+    background-color: orange;
+}
+.pop .fa-arrow-alt-circle-up {
+    color: green;
+}
+.pop .fa-arrow-alt-circle-up:hover {
+    background-color: green;
+}
+.pop .fa-trash-alt {
+    color: darkred;
+}
+.pop .fa-trash-alt:hover {
+    background-color: darkred;
+}
+
+/* Dice styles                                                                   */
+/* from https://dev.to/ekeijl/creating-dice-using-css-grid-j4                    */
+/* Original colors: face-bg #e7e7e7; inset top white, bottom #bbb, sides #d7d7d7 */
+/* Original sizes: face 104px x 104px, padding 10; inset 5px;                    */
+/*                 pip 24px x 24px; pip inset left alone                         */
+.die-face {
+    display: grid;
+    grid-template-areas:
+            "a . c"
+            "e g f"
+            "d . b";
+    flex: 0 0 auto;
+    margin: 16px;
+    padding: 6px;
+    width: 60px;
+    height: 60px;
+
+    background-color: #eebb00;
+    box-shadow: inset 0 3px #f0c000, inset 0 -3px #cc9900, inset 3px 0 #d7a700,
+    inset -3px 0#d7a700;
+    border-radius: 10%;
+
+    cursor: pointer;
+}
+.die-face .pip {
+    display: block;
+    align-self: center;
+    justify-self: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #333;
+    box-shadow: inset 0 3px #111, inset 0 -3px #555;
+}
+.die-face .pip:nth-child(2) {
+    grid-area: b;
+}
+.die-face .pip:nth-child(3) {
+    grid-area: c;
+}
+.die-face .pip:nth-child(4) {
+    grid-area: d;
+}
+.die-face .pip:nth-child(5) {
+    grid-area: e;
+}
+.die-face .pip:nth-child(6) {
+    grid-area: f;
+}
+/* This selects the last pip of odd-valued dice (1, 3, 5) and positions the pip in the center */
+.die-face .pip:nth-child(odd):last-child {
+    grid-area: g;
+}
+.die-face.shakey {
+    animation: roll 0.25s;
+    animation-iteration-count: infinite;
+}
+
+/* Animations */
+@keyframes buzz {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+@keyframes roll {
+    0% { transform: translate(3px, 2px)  rotate(3deg); }
+    10% { transform: rotate(6deg); }
+    20% { transform: translate(1px, 4px)  rotate(5deg); }
+    30% { transform: rotate(-3deg); }
+    40% { transform: translate(-2px, 3px)  rotate(-7deg); }
+    50% { transform: rotate(-2deg); }
+    60% { transform: rotate(-3deg); }
+    70% { transform: translate(3px, -4px)  rotate(-9deg); }
+    80% { transform: rotate(4deg); }
+    90% { transform: translate(-3px, 6px)  rotate(9deg); }
+    100% { transform: rotate(-3deg); }
+}

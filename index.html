@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hive Mind Scoreboard</title>
+  <!-- JQuery -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript"
+          src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript"
+          src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <!-- Howler.js -->
+  <script type="text/javascript"
+          src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.3/howler.min.js"></script>
+
+  <script src="hivemind.js"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="hivemind.css" rel="stylesheet">
+
+  <script>
+    $(function() { hm.prepGame(); });
+  </script>
+</head>
+
+<!-- Features -->
+<!--   1. "Roll dice" -->
+<!--   2. Show question (and suggest one) -->
+<!--   3. a. Extend options to: sound level slider, activity of bees duration and waittime, speed of transition into rows, other? -->
+<!--      b. Extend sounds to: delete player, roll dice, other events? -->
+<!--   4. Exit animation? -->
+<!--   5. Fix multiple popovers on at once -->
+<!--   6. db of previous questions -->
+<!--   7. Add toasts for events or errors (e.g. player x wasn't saved because y) -->
+<!--   7. Edit player? -->
+
+<body>
+
+<audio id="buzz">
+  <source src="sound/bee.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<!-- Modals -->
+<div id="quickStart" class="modal fade" tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Quick Game Start</h5>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-4">Name</div>
+            <div class="col-sm-2">Color</div>
+            <div class="col-sm-2">Level</div>
+            <div class="col-sm-1"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-sm-11"></div>
+          <div class="col-sm-1"><button type="button" class="btn btn-success qs-add"> + </button></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="quickStartSave">Start Game</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="addPlayer" class="modal fade" tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add a player</h5>
+      </div>
+      <div class="modal-body form-group">
+        <div class="form-group row">
+          <div class="col-sm-3 label"><label for="nm">Name:</label></div>
+          <div class="col-sm-7"><input class="form-control" type="text" name="nm" id="nm"></div>
+          <div class="col-sm-2"></div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-3 label"><label for="color">Color:</label></div>
+          <div class="col-sm-7">
+            <input class="form-control" type="color" id="color" name="color" value="#FF0000">
+          </div>
+          <div class="col-sm-2"></div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-3 label"><label for="level">Level:</label></div>
+          <div class="col-sm-7">
+            <input class="form-control" type="number" min="1" max="6" name="level" id="level" value="1">
+          </div>
+          <div class="col-sm-2"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="addPlayerSave" class="btn btn-primary">Save player</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="optionsModal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Game Options</h5>
+      </div>
+      <div class="modal-body form-group">
+        <div class="form-group row">
+          <label class="col-sm-4 label" for="nameLocation">Name Location:</label>
+          <div class="col-sm-7">
+            <select class="form-control" name="nameLocation" id="nameLocation">
+              <option value="below-tail">Bottom</option>
+              <option value="on-head">Head</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+          <div class="col-sm-1"></div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-4 label">Bees:</label>
+          <div class="col-sm-7 form-check">
+            <input class="form-check-input" type="checkbox" id="isActive" name="isActive">
+            <label class="form-check-label" for="isActive">Buzzing</label>
+          </div>
+          <div class="col-sm-1"></div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-4 label" for="soundOn">Sound:</label>
+          <div class="col-sm-7 form-check">
+            <input class="form-check-input" type="checkbox" id="soundOn" name="soundOn">
+            <label class="form-check-label" for="soundOn">On</label>
+          </div>
+          <div class="col-sm-1"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="saveOptions" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="board">
+  <h2 class="text">Hive Mind Scoreboard</h2>
+  <div id="hive"></div>
+</div>
+
+<div id="controls">
+  <h2 class="text">Controls</h2>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#quickStart">Quick Start</button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPlayer">Add Single Player</button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#optionsModal">Options</button>
+  <br/>
+  <div class="die-face">
+    <span class="pip"></span>
+  </div>
+  <div class="flower"></div>
+</div>
+</body>
+</html>
