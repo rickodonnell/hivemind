@@ -27,6 +27,11 @@
     "#00FA9A", "#D2691E", "#FA8072"                        // mediumspringgreen, chocolate, salmon
   ];
 
+  const flowerColors = [
+    "pink", "coral", "lightyellow", "lightskyblue", "lemonchiffon", "mediumaquamarine",
+    "lightsalmon", "violet", "darkorchid", "thistle", "palevioletred", "honeydew"
+  ];
+
   const soundSrcs = {
     bees: [ "bee.mp3" ],
     down: [
@@ -53,7 +58,13 @@
   const midPt = 280;
   const beeWd = [80, 70, 64, 58, 52, 50, 48, 46];
 
-  const flowerBeePos = [[[]], [[ 64, 76]], [[64, 50], [64, 103]], [[42, 76], [90, 51], [90, 102]]];
+  const flowerBeePos = [[[]], [[ 64, 76]], [[64, 50], [64, 103]], [[44, 76], [88, 57], [88, 95]]];
+  const dieResultText = [
+    "Honeypot! One bee goes up and one goes down.",
+    "One bee goes down this round.",
+    "Two bees go down this round.",
+    "Three bees go down this round."
+  ];
 
   const playerTpl = `
     <div class="player" data-toggle="popover">
@@ -106,7 +117,6 @@
   const cleanString = str => str.toLowerCase().replace(/[^a-z0-9]/g, "");
 
   const isNameTaken = str => !!players.find(p => cleanString(p.name) === cleanString(str));
-  const isColorTaken = str => !!players.find(p => p.color === str);
 
   const redistributeLevel = lvl => {
     const lvlPlyrs = players.filter(p => p.level === lvl);
@@ -129,6 +139,7 @@
     soundsLoaded = true;
   };
   const playRandomSound = (type, loop) => {
+    if (!soundsLoaded || !options.soundOn) return;
     const randomSound = sounds[type][getRndInt(sounds[type].length)];
     if (loop) randomSound.loop(true);
     randomSound.play();
@@ -138,8 +149,7 @@
   const rollDice = () => {
     let numPips = 1;
     $(".die-face").addClass("shakey");
-    const diceSound = soundsLoaded ? playRandomSound("dice", true) : null;
-    if (soundsLoaded) playRandomSound("dice", true);
+    const diceSound = playRandomSound("dice", true);
     const newNumInterval = window.setInterval(() => {
       $(".die-face").empty();
       numPips = getRndInt(6);
@@ -159,8 +169,8 @@
 
   // Number passed in here should be 0=honeypot, 1=1bee, 2=2bees, 3=3bees
   const populateFlower = (num) => {
-    console.log('flower population', num);
-    $(".flower").empty();
+    $(".die-result .text").text(dieResultText[num]);
+    $(".flower").empty().css({ backgroundColor: flowerColors[getRndInt(flowerColors.length)]});
     if (num === 0) {
       $(".flower").append(honeypotTpl);
     } else {
@@ -199,6 +209,12 @@
       });
       $(document).on("click", "#saveOptions", function(e) {
         hm.saveOptions();
+      });
+      $('#optionsModal').on('show.bs.modal', function (e) {
+        // Set the currently saved options into the modal on show
+        $("#nameLocation").val(options.nameClass);
+        $("#isActive").prop("checked", options.activeBees);
+        $("#soundOn").prop("checked", options.soundOn);
       });
 
       // Set up bee controls
@@ -261,6 +277,7 @@
       options.soundOn = $("#soundOn").is(":checked");
       // reset all bees in case this is changed mid-game
       $(".player .name").removeClass(prevOptions.nameClass).addClass(options.nameClass);
+      if (options.activeBees) hm.shakeRandomBee();
       $('#optionsModal').modal('hide');
     },
 
@@ -302,7 +319,7 @@
       const oldLvl = plyr.level;
       plyr.level = dir === "up" ? Math.max(plyr.level - 1, 1) : Math.min(plyr.level + 1, 6);
       $("#" + playerId).animate({ top: levelTops[plyr.level - 1] + "px" }, 750);
-      if (options.soundOn) playRandomSound(dir);
+      playRandomSound(dir);
       redistributeLevel(oldLvl);
       redistributeLevel(plyr.level);
     },
@@ -319,13 +336,10 @@
           if (!$(id).hasClass("shakey")) { // dont shake if already shaking
             const duration = (Math.random()*2 + 0.1) * 1000; // 0.1 to 2.1 seconds
             $(id).addClass("shakey");
-            let randomSound = null;
-            if (options.soundOn && soundsLoaded) {
-              randomSound = playRandomSound("bees");
-            }
+            const randomSound = playRandomSound("bees");
             setTimeout(() => {
               $(id).removeClass("shakey");
-              if (soundsLoaded && !!randomSound) randomSound.stop();
+              if (!!randomSound) randomSound.stop();
             }, duration);
           }
         }

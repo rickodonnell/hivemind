@@ -31,7 +31,7 @@
 </head>
 
 <!-- Features -->
-<!--   1. "Roll dice" -->
+<!-- x 1. "Roll dice" -->
 <!--   2. Show question (and suggest one) -->
 <!--   3. a. Extend options to: sound level slider, activity of bees duration and waittime, speed of transition into rows, other? -->
 <!--      b. Extend sounds to: delete player, roll dice, other events? -->
@@ -163,14 +163,27 @@
 
 <div id="controls">
   <h2 class="text">Controls</h2>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#quickStart">Quick Start</button>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPlayer">Add Single Player</button>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#optionsModal">Options</button>
-  <br/>
-  <div class="die-face">
-    <span class="pip"></span>
+  <div class="buttons">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#quickStart">Quick Start</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPlayer">Add Single Player</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#optionsModal">Options</button>
   </div>
-  <div class="flower"></div>
+  <div class="roller">
+    <div class="die">
+      <span class="text">Roll Dice</span>
+      <div class="die-face"><span class="pip"></span></div>
+    </div>
+    <div class="die-result">
+      <div class="flower"></div>
+      <div class="text">...</div>
+    </div>
+  </div>
+  <div class="question">
+    <div class="text">Question</div>
+    <textarea class="text">
+      Type the question here...
+    </textarea>
+  </div>
 </div>
 </body>
 </html>

@@ -66,7 +66,7 @@
     display: none;
 }
 .flower {
-    position: absolute;
+    position: relative;
     background-image: url(./img/flower.png);
     background-size: contain;
     background-repeat: no-repeat;
@@ -75,12 +75,31 @@
     width: 200px;
 }
 .honeypot {
+    position: absolute;
     background-image: url(./img/honeypot.png);
-    width: 76px;
-    height: 100px;
+    width: 66px;
+    height: 80px;
     background-size: contain;
     background-repeat: no-repeat;
-    margin: 48px 63px;
+    top: 56px;
+    left: 69px;
+}
+.roller, .question {
+    margin-top: 20px;
+    overflow: auto;
+    padding: 20px;
+    border: 1px solid gray;
+}
+.die-result {
+    float: left;
+}
+.die-result .text {
+    margin-top: 10px;
+    max-width: 200px;
+}
+.question textarea {
+    height: 120px;
+    width: 300px;
 }
 .player.shakey {
     animation: buzz 0.1s;
@@ -128,6 +147,10 @@
 /* Original colors: face-bg #e7e7e7; inset top white, bottom #bbb, sides #d7d7d7 */
 /* Original sizes: face 104px x 104px, padding 10; inset 5px;                    */
 /*                 pip 24px x 24px; pip inset left alone                         */
+.die {
+    float: left;
+    margin: 30px 20px;
+}
 .die-face {
     display: grid;
     grid-template-areas:
