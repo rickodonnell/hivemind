@@ -13,4 +13,4 @@
 6. Add toasts for game events or errors (e.g. some of the console.warnings now, like player X wasn't added because Y)
 7. Edit player
 
-This application is to implement a scoreboard for the board game Hive Mind, by Richard Garfield.  A demo page is up at https://rickodonnell.github.io/hivemind/
+This application implements a scoreboard for the board game Hive Mind, by Richard Garfield.  A demo page is up at https://rickodonnell.github.io/hivemind/
